@@ -92,6 +92,21 @@ def add_entity_aspect(config, name, *columns):
     config.action(('entity-aspect', name), register)
 
 
+class aspect_adapter(object):
+    def __init__(self, cls):
+        if not hasattr(self, 'venusian'):
+            self.venusian = __import__('venusian')
+        self.cls = cls
+
+    def __call__(self, wrapped):
+        def callback(context, name, ob):
+            config = context.config.with_package(info.module)
+            config.registry.registerAdapter(ob, (self.cls,), IAspects)
+
+        info = self.venusian.attach(wrapped, callback)
+        return wrapped
+
+
 def includeme(config):
     config.registry['entities'] = Entities(config.registry)
     config.add_directive('add_entity_aspect', add_entity_aspect)

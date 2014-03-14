@@ -55,6 +55,21 @@ def add_walker_file_type(self, name, reader):
     self.action((IWalkerFileType, name), register)
 
 
+class walker_file_type(object):
+    def __init__(self, name):
+        if not hasattr(self, 'venusian'):
+            self.venusian = __import__('venusian')
+        self.name = name
+
+    def __call__(self, wrapped):
+        def callback(context, name, ob):
+            config = context.config.with_package(info.module)
+            config.add_walker_file_type(self.name, ob)
+
+        info = self.venusian.attach(wrapped, callback)
+        return wrapped
+
+
 def includeme(config):
     config.registry['entities'].add_aspect(
         'walker',

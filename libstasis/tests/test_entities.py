@@ -51,3 +51,18 @@ def test_complex_query_filter(registry, entities):
     assert len(result) == 1
     assert result[0].size.value == 42
     assert result[0].name.value == u'bar'
+
+
+def test_return_types(registry, entities):
+    from datetime import datetime
+    entities.add_aspect('date', Column('value', types.DateTime))
+    entities.add_entity(propdict(size=23, name=u'foo', date=datetime(2014, 3, 14, 16, 00)))
+    entities.add_entity(propdict(size=42, name=u'bar', date=datetime(2014, 3, 14, 15, 00)))
+    result = entities.query('size', 'name', 'date')
+    assert len(result) == 2
+    assert result[0].size.value == 23
+    assert result[0].name.value == u'foo'
+    assert result[0].date.value == datetime(2014, 3, 14, 16, 00)
+    assert result[1].size.value == 42
+    assert result[1].name.value == u'bar'
+    assert result[1].date.value == datetime(2014, 3, 14, 15, 00)

@@ -70,7 +70,7 @@ class Entities(object):
         for aspect in aspects:
             fields.extend(aspect.columns.values()[1:])
             joins = joins.join(aspect)
-        s = select(fields).select_from(joins)
+        s = select(fields, use_labels=True).select_from(joins)
         if filters:
             if len(filters) == 1:
                 s = s.where(filters[0])

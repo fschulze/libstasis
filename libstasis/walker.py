@@ -19,6 +19,9 @@ class File(object):
         self.basepath = basepath
         self.subpath = subpath
 
+    def __repr__(self):
+        return '{cls.__module__}.{cls.__name__}({self.walker!r}, {self.basepath!r}, {self.subpath!r})'.format(self=self, cls=self.__class__)
+
 
 class Walker(object):
     def __init__(self, name=None, path=''):

@@ -25,8 +25,8 @@ class File(object):
 
 class Walker(object):
     def __init__(self, name=None, path=''):
-        self.name = name
-        self.path = path
+        self.name = unicode(name)
+        self.path = unicode(path)
 
     def walk(self, site):
         add_entity = site['entities'].add_entity
